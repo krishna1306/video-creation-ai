@@ -1,0 +1,484 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Slides that narrate themselves</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@6.0.2/dist/reveal.css">
+  <style>
+    :root {
+      --bg: #0e0f12;
+      --surface: #17191f;
+      --line: #2a2d36;
+      --ink: #f2eee6;
+      --muted: #9a9aa3;
+      --accent: #ff5b3a;
+      --wave: #5fd3c6;
+      --display: "Space Grotesk", system-ui, sans-serif;
+      --mono: "JetBrains Mono", ui-monospace, monospace;
+    }
+    html, body, .reveal-viewport { background: var(--bg) !important; }
+    .reveal { font-family: var(--display); font-size: 30px; color: var(--ink); }
+    .reveal .slides { text-align: left; }
+    .reveal h1, .reveal h2, .reveal h3 { font-family: var(--display); color: var(--ink); text-transform: none; margin: 0; letter-spacing: -0.02em; }
+    :where(.reveal) p { margin: 0; }
+    .frame { width: 100%; max-width: 38em; margin-inline: auto; }
+
+    /* Motif 1: timecode eyebrow with a record dot */
+    .eyebrow { font-family: var(--mono); font-size: 0.5em; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); display: flex; align-items: center; gap: 0.8em; margin-bottom: 0.9em; }
+    .eyebrow .dot { width: 0.7em; height: 0.7em; border-radius: 50%; background: var(--accent); }
+    .eyebrow b { color: var(--accent); font-weight: 600; }
+    .slide-title { font-size: 1.5em; line-height: 1.08; font-weight: 700; max-width: 22em; }
+    .dek { font-size: 0.72em; line-height: 1.45; color: var(--muted); max-width: 30em; margin-top: 0.7em; }
+    .accent { color: var(--accent); }
+    .mono, .code { font-family: var(--mono); font-variant-ligatures: none; }
+
+    /* Motif 2: cue marker chip */
+    .cue { font-family: var(--mono); font-weight: 600; color: var(--bg); background: var(--accent); padding: 0.05em 0.3em; border-radius: 0.2em; font-size: 0.9em; }
+    .slide-title .cue { font-size: 0.62em; vertical-align: 0.18em; }
+
+    /* Hero */
+    .hero .slide-title { font-size: 2.3em; line-height: 1.02; }
+    .playhead { position: relative; height: 2px; background: var(--line); margin: 1.2em 0 0.9em; max-width: 30em; overflow: visible; }
+    .playhead::after { content: ""; position: absolute; left: 0; top: -0.35em; width: 2px; height: calc(0.7em + 2px); background: var(--accent); }
+    .reveal .present .playhead::before { content: ""; position: absolute; inset: 0 auto 0 0; background: var(--accent); animation: sweep 4s ease-out forwards; }
+    .reveal .present .playhead::after { animation: head 4s ease-out forwards; }
+    @keyframes sweep { from { width: 0; } to { width: 100%; } }
+    @keyframes head { from { left: 0; } to { left: 100%; } }
+
+    /* Three problems / outcomes */
+    .trio { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.2em; margin-top: 1.4em; }
+    .trio > div { border-top: 2px solid var(--line); padding-top: 0.8em; }
+    .trio h3 { font-size: 0.85em; display: flex; align-items: center; gap: 0.4em; }
+    .trio p { font-size: 0.6em; line-height: 1.45; color: var(--muted); margin-top: 0.5em; }
+    .trio svg { width: 1em; height: 1em; color: var(--accent); }
+
+    /* Pipeline flow */
+    .flow { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0.5em; margin-top: 1.6em; }
+    .node { background: var(--surface); border: 1px solid var(--line); border-radius: 0.3em; padding: 0.7em 0.6em; position: relative; }
+    .node .n { font-family: var(--mono); font-size: 0.45em; color: var(--accent); }
+    .node h3 { font-size: 0.8em; margin-top: 0.2em; }
+    .node p { font-size: 0.48em; color: var(--muted); line-height: 1.4; margin-top: 0.3em; }
+    .node:not(:last-child)::after { content: "→"; position: absolute; right: -0.55em; top: 50%; transform: translateY(-50%); color: var(--muted); font-size: 0.7em; z-index: 1; }
+    .brackets { display: grid; grid-template-columns: 1fr 4fr; gap: 0.5em; margin-top: 0.8em; font-family: var(--mono); font-size: 0.5em; }
+    .brackets div { border-top: 2px solid var(--accent); padding-top: 0.5em; color: var(--ink); }
+    .brackets div:last-child { border-color: var(--wave); }
+
+    /* Evidence layout */
+    .evidence { display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); gap: 1.4em; align-items: center; margin-top: 1.2em; }
+    .points { list-style: none; margin: 0; padding: 0; }
+    .points li { font-size: 0.66em; line-height: 1.4; padding: 0.55em 0; border-top: 1px solid var(--line); }
+    .points li b { display: block; color: var(--ink); }
+    .points li span { color: var(--muted); }
+    .code { font-family: var(--mono); font-size: 0.5em; line-height: 1.6; background: var(--surface); border: 1px solid var(--line); border-radius: 0.4em; padding: 1em 1.2em; white-space: pre; color: #c9c6bf; }
+    .code .t { color: var(--wave); }
+    .code .a { color: #e7c07b; }
+    .code .hl { display: inline-block; border-radius: 0.2em; transition: background 0.4s, color 0.4s; }
+    .code .hl.visible { background: rgba(255, 91, 58, 0.18); color: var(--ink); }
+    .code .m { color: var(--accent); font-weight: 600; }
+    .code .c { color: #6b6e78; }
+    .term { margin-top: 0.8em; }
+    .ok { color: var(--wave); }
+    .bad { color: var(--accent); }
+
+    /* Voice */
+    .stat { font-size: 1.6em; font-weight: 700; line-height: 1; }
+    .points li b.stat { color: var(--accent); margin-bottom: 0.15em; }
+    .panel { background: var(--surface); border: 1px solid var(--line); border-radius: 0.4em; padding: 1em 1.1em; }
+    .wave { display: flex; align-items: center; gap: 3px; height: 4.2em; }
+    .wave i { flex: 1; background: var(--wave); border-radius: 2px; opacity: 0.85; }
+    .words { display: grid; grid-template-columns: 0.9fr 1.7fr 0.5fr 1fr 0.9fr 1.1fr; gap: 0.3em; margin-top: 0.7em; font-family: var(--mono); font-size: 0.46em; }
+    .words div { border-left: 2px solid var(--accent); padding-left: 0.4em; }
+    .words b { display: block; color: var(--ink); font-weight: 600; }
+    .words span { color: var(--muted); }
+
+    /* Timing lanes */
+    .lanes { margin-top: 1.4em; }
+    .lane { display: grid; grid-template-columns: 8.5em 1fr; align-items: center; height: 2.2em; border-top: 1px solid var(--line); }
+    .lane .lbl { font-size: 0.55em; color: var(--muted); }
+    .lane .lbl b { color: var(--ink); display: block; font-size: 1.15em; }
+    .lane .track { position: relative; height: 100%; }
+    .tick { position: absolute; top: 18%; bottom: 18%; width: 3px; border-radius: 2px; }
+    .tick span { position: absolute; left: 0.6em; top: 50%; transform: translateY(-50%); white-space: nowrap; font-family: var(--mono); font-size: 0.48em; }
+    .wordline { position: relative; height: 1.8em; font-family: var(--mono); font-size: 0.55em; color: var(--muted); }
+    .wordline > span { position: absolute; top: 0.4em; white-space: nowrap; }
+    .wordline .key { color: var(--ink); font-weight: 600; }
+
+    /* Before / after */
+    .ba { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2em; margin-top: 1.4em; }
+    .ba > div { border: 1px solid var(--line); border-radius: 0.4em; padding: 1em 1.1em; }
+    .ba .after { border-color: var(--accent); background: rgba(255, 91, 58, 0.06); }
+    .ba .tag { font-family: var(--mono); font-size: 0.45em; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+    .ba .after .tag { color: var(--accent); }
+    .ba h3 { font-size: 0.9em; margin: 0.3em 0 0.4em; }
+    .ba p { font-size: 0.58em; line-height: 1.5; color: var(--muted); }
+    .takeaway { margin-top: 1.1em; font-size: 0.8em; font-weight: 500; }
+
+    /* Outputs */
+    .files { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1em; margin-top: 1.5em; }
+    .files > div { border-top: 2px solid var(--wave); padding-top: 0.7em; }
+    .files .fn { font-family: var(--mono); font-size: 0.55em; color: var(--ink); font-weight: 600; }
+    .files p { font-size: 0.55em; color: var(--muted); line-height: 1.45; margin-top: 0.4em; }
+
+    /* Commands */
+    .cmds { font-size: 0.56em; margin-top: 1.3em; }
+    .cmds div { padding: 0.25em 0; }
+
+    /* CTA */
+    .skills { display: grid; grid-template-columns: 1fr 1fr; gap: 1.4em; margin-top: 1.5em; }
+    .skills > div { border-top: 3px solid var(--accent); padding-top: 0.8em; }
+    .skills > div:last-child { border-color: var(--wave); }
+    .skills .n { font-family: var(--mono); font-size: 0.45em; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.3em; }
+    .skills .fn { font-family: var(--mono); font-size: 0.8em; font-weight: 600; }
+    .reveal .links + .dek { margin-top: 0.5em; }
+    .skills p { font-size: 0.6em; color: var(--muted); line-height: 1.45; margin-top: 0.4em; }
+    .links { margin-top: 1.4em; font-size: 0.8em; font-weight: 500; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .reveal .slides section, .reveal .fragment, .reveal .present .playhead::before, .reveal .present .playhead::after {
+        transition-duration: 0.01ms !important; animation-duration: 0.01ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+      <!-- 1. Hero -->
+      <section class="hero">
+        <div class="frame">
+          <div class="eyebrow"><span class="dot"></span>00:00 &nbsp;/&nbsp; This video was not recorded</div>
+          <h1 class="slide-title">Made by<br><span class="accent">two agent skills.</span></h1>
+          <div class="playhead"></div>
+          <p class="dek">Slides, animations, voice and captions. No video editor, no microphone, no retakes.</p>
+        </div>
+        <aside class="notes">
+          Opening. Playhead sweeps on entry.
+          VO: "Everything you are watching right now, the slides, the animations, the voice, and the captions, was made by two agent skills. No video editor, no microphone, and no retakes."
+        </aside>
+      </section>
+
+      <!-- 2. Two skills -->
+      <section>
+        <div class="frame">
+          <div class="eyebrow"><span class="dot"></span>How to use it</div>
+          <h2 class="slide-title">Two skills. That's the whole workflow.</h2>
+          <div class="skills">
+            <div class="fragment fade-up" data-fragment-index="0"><div class="n">Skill 01</div><div class="fn">revealjs</div><p>Ask for a presentation. Get an animated deck you can present.</p></div>
+            <div class="fragment fade-up" data-fragment-index="1"><div class="n">Skill 02</div><div class="fn">revealjs-vidcast</div><p>Ask for a video. Get a narrated MP4 with captions, in sync.</p></div>
+          </div>
+          <p class="links fragment fade-up" data-fragment-index="2">No reveal.js, text-to-speech or sync expertise required.</p>
+          <p class="dek fragment fade-up" data-fragment-index="3">Curious what happens inside? <span class="accent">Keep watching.</span></p>
+        </div>
+        <aside class="notes">
+          VO: "It takes two skills. First, the [>] reveal J S skill builds a presentation you can present. Then the [>] vidcast skill turns that deck into a narrated video. You [>] don't need to know how reveal J S, text to speech, or the syncing works. Your agent handles all of it. [>] If you are curious what happens inside the skills, keep watching."
+        </aside>
+      </section>
+
+      <!-- 3. Problem -->
+      <section>
+        <div class="frame">
+          <div class="eyebrow"><span class="dot"></span>The problem</div>
+          <h2 class="slide-title">Recording yourself is the slow part.</h2>
+          <div class="trio">
+            <div class="fragment fade-up">
+              <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>Retakes</h3>
+              <p>One stumble and you start the take again.</p>
+            </div>
+            <div class="fragment fade-up">
+              <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Drift</h3>
+              <p>Screen recorders lag, so animations land a beat after the words.</p>
+            </div>
+            <div class="fragment fade-up">
+              <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg>Edits</h3>
+              <p>Change one slide and you re-record the whole talk.</p>
+            </div>
+          </div>
+        </div>
+        <aside class="notes">
+          VO: "So, what happens inside? Turning slides into a video usually means recording yourself, and that brings three problems. [>] Retakes: one stumble, and you start again. [>] Drift: the screen recorder lags, so animations land a beat after the words. [>] Edits: change one slide, and you record the whole thing again."
+        </aside>
+      </section>
+
+      <!-- 3. Pipeline -->
+      <section>
+        <div class="frame">
+          <div class="eyebrow"><span class="dot"></span>The pipeline</div>
+          <h2 class="slide-title">Five stages. Two skills.</h2>
+          <div class="flow">
+            <div class="node fragment fade-up"><div class="n">01</div><h3>Deck</h3><p>Slides with fragment animations</p></div>
+            <div class="node fragment fade-up"><div class="n">02</div><h3>Script</h3><p>Voice-over with cue markers</p></div>
+            <div class="node fragment fade-up"><div class="n">03</div><h3>Voice</h3><p>Kokoro TTS, on your Mac</p></div>
+            <div class="node fragment fade-up"><div class="n">04</div><h3>Timing</h3><p>Words become cue times</p></div>
+            <div class="node fragment fade-up"><div class="n">05</div><h3>Video</h3><p>Frame-exact MP4 + captions</p></div>
+          </div>
+          <div class="brackets fragment fade-up">
+            <div>revealjs skill</div>
+            <div>revealjs-vidcast skill</div>
+          </div>
+        </div>
+        <aside class="notes">
+          VO: "The pipeline has five stages. First, build a [>] deck with animations. Next, write a [>] script with cue markers. Then synthesise a [>] voice with Kokoro. Turn the spoken words into [>] timing. And finally, render the [>] video, frame by frame. [>] Two skills split the work: one builds the deck, and the other turns it into the video."
+        </aside>
+      </section>
+
+      <!-- 4. Stage 1: deck -->
+      <section>
+        <div class="frame">
+          <div class="eyebrow"><span class="dot"></span>Stage <b>01</b> &nbsp;/&nbsp; Deck</div>
+          <h2 class="slide-title">Every fragment is a step the narrator will reach.</h2>
+          <div class="evidence">
+            <ul class="points">
+              <li class="fragment fade-up" data-fragment-index="0"><b>Story first</b><span>One job per slide; titles state a claim.</span></li>
+              <li class="fragment fade-up" data-fragment-index="1"><b>Composition</b><span>Real evidence over decoration.</span></li>
+              <li class="fragment fade-up" data-fragment-index="2"><b>Fragments</b><span>One per spoken step, in spoken order.</span></li>
+            </ul>
+<div class="code"><span class="t">&lt;section&gt;</span>
+  <span class="t">&lt;h2&gt;</span>Five stages. Two skills.<span class="t">&lt;/h2&gt;</span>
+  <span class="hl fragment custom" data-fragment-index="2"><span class="t">&lt;div</span> <span class="a">class=</span>"node <span class="m">fragment</span>"<span class="t">&gt;</span>Deck<span class="t">&lt;/div&gt;</span></span>
+  <span class="hl fragment custom" data-fragment-index="2"><span class="t">&lt;div</span> <span class="a">class=</span>"node <span class="m">fragment</span>"<span class="t">&gt;</span>Script<span class="t">&lt;/div&gt;</span></span>
+  <span class="hl fragment custom" data-fragment-index="2"><span class="t">&lt;div</span> <span class="a">class=</span>"node <span class="m">fragment</span>"<span class="t">&gt;</span>Voice<span class="t">&lt;/div&gt;</span></span>
+  <span class="c">&lt;!-- … --&gt;</span>
+  <span class="t">&lt;aside</span> <span class="a">class=</span>"notes"<span class="t">&gt;</span>VO: "…"<span class="t">&lt;/aside&gt;</span>
+<span class="t">&lt;/section&gt;</span></div>
+          </div>
+        </div>
+        <aside class="notes">
+          VO: "Stage one is the deck, built with the reveal J S skill. It starts from the [>] story, giving every slide one job. Then it chooses a [>] composition, preferring real evidence over decoration. Animations are [>] fragments: each one is a step the narrator will reach, in the order it is spoken."
+        </aside>
+      </section>
+
+      <!-- 5. Stage 2: script -->
+      <section>
+        <div class="frame">
+          <div class="eyebrow"><span class="dot"></span>Stage <b>02</b> &nbsp;/&nbsp; Script</div>
+          <h2 class="slide-title">A <span class="cue">[&gt;]</span> marker sits right before the word.</h2>
+          <div class="evidence">
+            <ul class="points">
+              <li class="fragment fade-up" data-fragment-index="0"><b>Lives in speaker notes</b><span>The last line of each slide's notes: <span class="mono">VO: "…"</span></span></li>
+              <li class="fragment fade-up" data-fragment-index="1"><b>One marker per step</b><span>Before the noun that names the step, not the sentence.</span></li>
+              <li class="fragment fade-up" data-fragment-index="2"><b>Checked before render</b><span><span class="mono">inspect_deck.py</span> compares steps to markers.</span></li>
+            </ul>
+            <div>
+<div class="code fragment fade-up" data-fragment-index="0"><span class="c">&lt;!-- slide 3 speaker notes --&gt;</span>
+VO: "First, build a <span class="m">[&gt;]</span> deck with animations.
+Next, write a <span class="m">[&gt;]</span> script with cue markers.
+Then synthesise a <span class="m">[&gt;]</span> voice with Kokoro. …"</div>
+<div class="code term fragment fade-up" data-fragment-index="2">$ inspect_deck.py deck.html
+slide 3   steps 6   markers 6   <span class="ok">ok</span>
+slide 4   steps 3   markers 2   <span class="bad">MISMATCH</span></div>
+            </div>
+          </div>
+        </div>
+        <aside class="notes">
+          VO: "Stage two is the script. The narration lives in each slide's [>] speaker notes, with a cue marker right before the word that reveals each step. The rule is simple: [>] one marker per step, placed before the noun, not the start of the sentence. Before rendering, an [>] inspect script compares steps to markers, and flags any mismatch."
+        </aside>
+      </section>
+
+      <!-- 6. Stage 3: voice -->
+      <section>
+        <div class="frame">
+          <div class="eyebrow"><span class="dot"></span>Stage <b>03</b> &nbsp;/&nbsp; Voice</div>
+          <h2 class="slide-title">Kokoro speaks locally, and says <em>when</em>.</h2>
+          <div class="evidence">
+            <ul class="points">
+              <li class="fragment fade-up" data-fragment-index="0"><b class="stat">82M</b><span>parameters. Open weights on Hugging Face.</span></li>
+              <li class="fragment fade-up" data-fragment-index="1"><b>Runs on your Mac</b><span>No API key. Nothing leaves the machine.</span></li>
+              <li class="fragment fade-up" data-fragment-index="2"><b>Word timestamps</b><span>A first estimate of when each word starts.</span></li>
+            </ul>
+            <div class="panel">
+              <div class="wave" aria-hidden="true"></div>
+              <div class="words fragment fade-up" data-fragment-index="2">
+                <div><b>then</b><span>0.00</span></div>
+                <div><b>synthesise</b><span>0.18</span></div>
+                <div><b>a</b><span>0.86</span></div>
+                <div><b>voice</b><span>0.95</span></div>
+                <div><b>with</b><span>1.38</span></div>
+                <div><b>Kokoro</b><span>1.57</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <aside class="notes">
+          Word times on the panel are illustrative.
+          VO: "Stage three is the voice. Kokoro is an open-weight text to speech model on Hugging Face, with just [>] eighty-two million parameters. It [>] runs locally on a Mac, so there is no API key, and nothing leaves the machine. And it returns [>] word timestamps: a first estimate of when each word is spoken."
+        </aside>
+      </section>
+
+      <!-- 7. Stage 4: timing -->
+      <section>
+        <div class="frame">
+          <div class="eyebrow"><span class="dot"></span>Stage <b>04</b> &nbsp;/&nbsp; Timing</div>
+          <h2 class="slide-title">Whisper checks when each word is <span class="accent">heard</span>.</h2>
+          <div class="lanes">
+            <div class="lane">
+              <div class="lbl">Narration</div>
+              <div class="wordline">
+                <span style="left:2%">then</span><span style="left:11%">synthesise</span><span style="left:33%">a</span><span class="key" style="left:41%"><span class="cue">[&gt;]</span> voice</span><span style="left:62%">with</span><span style="left:72%">Kokoro</span>
+              </div>
+            </div>
+            <div class="lane fragment fade-up" data-fragment-index="0">
+              <div class="lbl"><b>Kokoro estimate</b>word timestamps</div>
+              <div class="track"><div class="tick" style="left:36%; background:var(--muted)"><span>0.95 s</span></div></div>
+            </div>
+            <div class="lane fragment fade-up" data-fragment-index="1">
+              <div class="lbl"><b>Heard by Whisper</b>ground truth</div>
+              <div class="track"><div class="tick" style="left:47%; background:var(--wave)"><span class="ok">1.38 s &nbsp;(+0.43)</span></div></div>
+            </div>
+            <div class="lane fragment fade-up" data-fragment-index="2">
+              <div class="lbl"><b>Step fires</b>0.1 s early</div>
+              <div class="track"><div class="tick" style="left:45%; background:var(--accent)"><span class="accent">1.28 s</span></div></div>
+            </div>
+          </div>
+        </div>
+        <aside class="notes">
+          Times are illustrative.
+          VO: "Stage four is timing. Kokoro's [>] estimate can be half a second off, especially at the start of a sentence. So [>] Whisper transcribes each clip, and the cue becomes the moment the word is actually heard. The step then [>] fires a tenth of a second early, which reads as perfectly in sync."
+        </aside>
+      </section>
+
+      <!-- 8. Stage 5: capture -->
+      <section>
+        <div class="frame">
+          <div class="eyebrow"><span class="dot"></span>Stage <b>05</b> &nbsp;/&nbsp; Video</div>
+          <h2 class="slide-title">Render on a virtual clock, not a screen recorder.</h2>
+          <div class="ba">
+            <div class="fragment fade-up" data-fragment-index="0">
+              <div class="tag">Screen recording</div>
+              <h3>Real time, best effort</h3>
+              <p>Under load the capture falls one to fourteen seconds behind the page. Animations look almost synced.</p>
+            </div>
+            <div class="after fragment fade-up" data-fragment-index="1">
+              <div class="tag">Virtual clock</div>
+              <h3>Paused, seeked, captured</h3>
+              <p>Timers, requestAnimationFrame and CSS animations are paused, then seeked to each frame's exact time in headless Chromium.</p>
+            </div>
+          </div>
+          <p class="takeaway fragment fade-up" data-fragment-index="2">A step fired at frame <span class="mono accent">n</span> is on screen at frame <span class="mono accent">n</span>.</p>
+        </div>
+        <aside class="notes">
+          VO: "Stage five renders the video. A [>] screen recorder runs in real time, and under load it can fall seconds behind. Instead, the renderer uses a [>] virtual clock: timers and CSS animations are paused, then seeked to the exact time of every frame. So [>] a step fired at frame N is on screen at frame N, no matter how slowly the frames are captured."
+        </aside>
+      </section>
+
+      <!-- 9. Outputs -->
+      <section>
+        <div class="frame">
+          <div class="eyebrow"><span class="dot"></span>Output</div>
+          <h2 class="slide-title">Captions and a sync report ship with the video.</h2>
+          <div class="files">
+            <div class="fragment fade-up" data-fragment-index="0"><div class="fn">deck.mp4</div><p>1080p H.264, narration muxed in.</p></div>
+            <div class="fragment fade-up" data-fragment-index="1"><div class="fn">deck.srt</div><p>Caption track timed from the same narration clips.</p></div>
+            <div class="fragment fade-up" data-fragment-index="2"><div class="fn">timeline.json</div><p>When each cue word is spoken and its step fires.</p></div>
+            <div class="fragment fade-up" data-fragment-index="3"><div class="fn">check_sync.py</div><p>Fails any step that lags more than 0.5 s.</p></div>
+          </div>
+        </div>
+        <aside class="notes">
+          VO: "Each render produces more than a video. The [>] M P 4, with the narration muxed in. An [>] S R T caption track, timed from the same narration clips. A [>] timeline file, recording when each cue word is spoken and when its step fires. And a [>] sync check, which listens to the finished video, watches the screen, and fails any step that lags by more than half a second."
+        </aside>
+      </section>
+
+      <!-- 11. Scripts ship in the skill -->
+      <section>
+        <div class="frame">
+          <div class="eyebrow"><span class="dot"></span>You never type this</div>
+          <h2 class="slide-title">Every script ships inside the skill.</h2>
+<div class="code cmds"><div><span class="t">revealjs-vidcast/</span></div><div class="fragment fade-up" data-fragment-index="0">  SKILL.md               <span class="c"># how to run it, and how to fix it</span></div><div class="fragment fade-up" data-fragment-index="1">  scripts/
+    setup.sh             <span class="c"># Kokoro, Whisper, Chromium</span>
+    inspect_deck.py      <span class="c"># steps vs. markers</span>
+    render_video.py      <span class="c"># narrate + render</span>
+    check_sync.py        <span class="c"># lag per step</span></div></div>
+          <p class="dek fragment fade-up" data-fragment-index="2" style="max-width:none">Different Python setup? Your agent adapts the scripts to your environment.</p>
+        </div>
+        <aside class="notes">
+          VO: "And you never have to run any of this by hand. Every script ships inside the skill. The [>] skill file tells your agent how to run them, and how to fix them. The [>] scripts handle setup, inspection, rendering, and the sync check. And if your [>] Python environment is different, your agent is smart enough to adapt the setup to match it."
+        </aside>
+      </section>
+
+      <!-- 12. Model choice -->
+      <section>
+        <div class="frame">
+          <div class="eyebrow"><span class="dot"></span>Model choice</div>
+          <h2 class="slide-title">The model shapes the design.<br>Code guarantees the sync.</h2>
+          <div class="ba">
+            <div class="after fragment fade-up" data-fragment-index="0">
+              <div class="tag">Depends on the model</div>
+              <h3>Design and story</h3>
+              <p>Layout, animation choices, visual polish and the narration script. Stronger models make better decks.</p>
+            </div>
+            <div class="fragment fade-up" data-fragment-index="1" style="border-color:var(--wave)">
+              <div class="tag" style="color:var(--wave)">Done by scripts</div>
+              <h3>Voice, timing and render</h3>
+              <p>Cue timing, Kokoro narration, frame capture, captions and the sync check. Any model gets a working video.</p>
+            </div>
+          </div>
+          <p class="takeaway fragment fade-up" data-fragment-index="2">This deck was designed by <span class="accent">Claude Opus 5.5</span>.</p>
+        </div>
+        <aside class="notes">
+          VO: "One thing does depend on your model. The [>] design and story are written by the model: the layout, the animations, and the script. Stronger models make better decks. The [>] voice, timing, and render are done by scripts, so whichever model you use, you still get a working, synced video. For the best design, use a strong model. [>] This deck was designed by Claude Opus five point five."
+        </aside>
+      </section>
+
+      <!-- 13. Text model is enough -->
+      <section>
+        <div class="frame">
+          <div class="eyebrow"><span class="dot"></span>What it costs</div>
+          <h2 class="slide-title">A text model is all you need.</h2>
+          <div class="trio">
+            <div class="fragment fade-up">
+              <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="m10 13-2 2 2 2"/><path d="m14 17 2-2-2-2"/></svg>One HTML file</h3>
+              <p>That's where the tokens go. Everything after it is code, not generation.</p>
+            </div>
+            <div class="fragment fade-up">
+              <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="2" x2="22" y1="2" y2="22"/><path d="M10.41 10.41a2 2 0 1 1-2.83-2.83"/><line x1="13.5" x2="6" y1="13.5" y2="21"/><line x1="18" x2="21" y1="12" y2="15"/><path d="M3.59 3.59A1.99 1.99 0 0 0 3 5v14a2 2 0 0 0 2 2h14c.55 0 1.052-.22 1.41-.59"/><path d="M21 15V5a2 2 0 0 0-2-2H9"/></svg>No image or video model</h3>
+              <p>Slides are HTML, the voice is Kokoro, the video is ffmpeg.</p>
+            </div>
+            <div class="fragment fade-up">
+              <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>Multimodal helps</h3>
+              <p>Playwright screenshots let the model check its own slides.</p>
+            </div>
+          </div>
+        </div>
+        <aside class="notes">
+          VO: "It is also cheap to run. The model writes [>] one HTML file, and everything after that is code, so very few tokens are spent. You need [>] no image or video model, only a text model. A [>] multimodal model does help: the agent takes Playwright screenshots of each slide, and checks that everything renders correctly."
+        </aside>
+      </section>
+
+      <!-- 14. CTA -->
+      <section>
+        <div class="frame">
+          <div class="eyebrow"><span class="dot"></span>Your turn</div>
+          <h2 class="slide-title">Make a deck. Let it speak.</h2>
+          <div class="skills">
+            <div class="fragment fade-up" data-fragment-index="0"><div class="n">Skill 01</div><div class="fn">revealjs</div><p>Story-first reveal.js decks with purposeful fragments and speaker notes.</p></div>
+            <div class="fragment fade-up" data-fragment-index="1"><div class="n">Skill 02</div><div class="fn">revealjs-vidcast</div><p>Kokoro narration, Whisper-checked timing, frame-exact MP4 and captions.</p></div>
+          </div>
+          <p class="links fragment fade-up" data-fragment-index="2">Both skills are linked in the post <span class="accent">↓</span></p>
+        </div>
+        <aside class="notes">
+          VO: "So, two skills. The [>] reveal J S skill builds the deck. The [>] vidcast skill turns it into a narrated video. [>] Links to both are in the post. Make a deck, and let it speak for itself."
+        </aside>
+      </section>
+    </div>
+  </div>
+  <script type="module">
+    import Reveal from "https://cdn.jsdelivr.net/npm/reveal.js@6.0.2/dist/reveal.mjs";
+    import RevealNotes from "https://cdn.jsdelivr.net/npm/reveal.js@6.0.2/dist/plugin/notes.mjs";
+    for (const wave of document.querySelectorAll(".wave")) {
+      for (let i = 0; i < 64; i++) {
+        const h = 18 + 70 * Math.abs(Math.sin(i * 0.55) * Math.cos(i * 0.17));
+        wave.insertAdjacentHTML("beforeend", `<i style="height:${h.toFixed(0)}%"></i>`);
+      }
+    }
+    Reveal.initialize({
+      width: 1280, height: 720, margin: 0.06,
+      hash: true, transition: "fade", transitionSpeed: "default",
+      controls: true, progress: true, center: true,
+      plugins: [RevealNotes],
+    });
+  </script>
+</body>
+</html>

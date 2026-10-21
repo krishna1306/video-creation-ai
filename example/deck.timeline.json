@@ -1,0 +1,305 @@
+[
+ {
+  "slide": 1,
+  "start": 0.0,
+  "steps": []
+ },
+ {
+  "slide": 2,
+  "start": 13.367,
+  "steps": [
+   {
+    "word": "reveal J S",
+    "spoken": 16.547,
+    "fired": 16.433
+   },
+   {
+    "word": "vidcast skill turns",
+    "spoken": 20.607,
+    "fired": 20.5
+   },
+   {
+    "word": "don't need to",
+    "spoken": 24.327,
+    "fired": 24.233
+   },
+   {
+    "word": "If you are",
+    "spoken": 30.607,
+    "fired": 30.5
+   }
+  ]
+ },
+ {
+  "slide": 3,
+  "start": 35.867,
+  "steps": [
+   {
+    "word": "Retakes one stumble",
+    "spoken": 43.987,
+    "fired": 43.9
+   },
+   {
+    "word": "Drift the screen",
+    "spoken": 46.847,
+    "fired": 46.733
+   },
+   {
+    "word": "Edits change one",
+    "spoken": 52.027,
+    "fired": 51.933
+   }
+  ]
+ },
+ {
+  "slide": 4,
+  "start": 57.4,
+  "steps": [
+   {
+    "word": "deck with animations",
+    "spoken": 61.22,
+    "fired": 61.133
+   },
+   {
+    "word": "script with cue",
+    "spoken": 63.62,
+    "fired": 63.533
+   },
+   {
+    "word": "voice with Kokoro",
+    "spoken": 66.2,
+    "fired": 66.1
+   },
+   {
+    "word": "timing And finally",
+    "spoken": 69.14,
+    "fired": 69.033
+   },
+   {
+    "word": "video frame by",
+    "spoken": 71.24,
+    "fired": 71.133
+   },
+   {
+    "word": "Two skills split",
+    "spoken": 73.34,
+    "fired": 73.233
+   }
+  ]
+ },
+ {
+  "slide": 5,
+  "start": 79.9,
+  "steps": [
+   {
+    "word": "story giving every",
+    "spoken": 85.58,
+    "fired": 85.467
+   },
+   {
+    "word": "composition preferring real",
+    "spoken": 89.26,
+    "fired": 89.167
+   },
+   {
+    "word": "fragments each one",
+    "spoken": 94.08,
+    "fired": 93.967
+   }
+  ]
+ },
+ {
+  "slide": 6,
+  "start": 100.867,
+  "steps": [
+   {
+    "word": "speaker notes with",
+    "spoken": 105.307,
+    "fired": 105.2
+   },
+   {
+    "word": "one marker per",
+    "spoken": 111.687,
+    "fired": 111.6
+   },
+   {
+    "word": "inspect script compares",
+    "spoken": 117.407,
+    "fired": 117.3
+   }
+  ]
+ },
+ {
+  "slide": 7,
+  "start": 123.2,
+  "steps": [
+   {
+    "word": "eighty-two million parameters",
+    "spoken": 130.462,
+    "fired": 130.367
+   },
+   {
+    "word": "runs locally on",
+    "spoken": 132.74,
+    "fired": 132.633
+   },
+   {
+    "word": "word timestamps a",
+    "spoken": 138.54,
+    "fired": 138.433
+   }
+  ]
+ },
+ {
+  "slide": 8,
+  "start": 144.533,
+  "steps": [
+   {
+    "word": "estimate can be",
+    "spoken": 147.753,
+    "fired": 147.667
+   },
+   {
+    "word": "Whisper transcribes each",
+    "spoken": 152.113,
+    "fired": 152.0
+   },
+   {
+    "word": "fires a tenth",
+    "spoken": 158.153,
+    "fired": 158.067
+   }
+  ]
+ },
+ {
+  "slide": 9,
+  "start": 164.467,
+  "steps": [
+   {
+    "word": "screen recorder runs",
+    "spoken": 167.687,
+    "fired": 167.6
+   },
+   {
+    "word": "virtual clock timers",
+    "spoken": 174.667,
+    "fired": 174.567
+   },
+   {
+    "word": "a step fired",
+    "spoken": 182.107,
+    "fired": 182.0
+   }
+  ]
+ },
+ {
+  "slide": 10,
+  "start": 189.733,
+  "steps": [
+   {
+    "word": "M P 4",
+    "spoken": 193.295,
+    "fired": 193.2
+   },
+   {
+    "word": "S R T",
+    "spoken": 196.37,
+    "fired": 196.267
+   },
+   {
+    "word": "timeline file recording",
+    "spoken": 200.473,
+    "fired": 200.367
+   },
+   {
+    "word": "sync check which",
+    "spoken": 205.693,
+    "fired": 205.6
+   }
+  ]
+ },
+ {
+  "slide": 11,
+  "start": 214.733,
+  "steps": [
+   {
+    "word": "skill file tells",
+    "spoken": 220.813,
+    "fired": 220.7
+   },
+   {
+    "word": "scripts handle setup",
+    "spoken": 224.873,
+    "fired": 224.767
+   },
+   {
+    "word": "Python environment is",
+    "spoken": 229.693,
+    "fired": 229.6
+   }
+  ]
+ },
+ {
+  "slide": 12,
+  "start": 236.533,
+  "steps": [
+   {
+    "word": "design and story",
+    "spoken": 239.653,
+    "fired": 239.567
+   },
+   {
+    "word": "voice timing and",
+    "spoken": 247.153,
+    "fired": 247.067
+   },
+   {
+    "word": "This deck was",
+    "spoken": 256.293,
+    "fired": 256.2
+   }
+  ]
+ },
+ {
+  "slide": 13,
+  "start": 261.4,
+  "steps": [
+   {
+    "word": "one HTML file",
+    "spoken": 264.64,
+    "fired": 264.533
+   },
+   {
+    "word": "no image or",
+    "spoken": 270.76,
+    "fired": 270.667
+   },
+   {
+    "word": "multimodal model does",
+    "spoken": 274.363,
+    "fired": 274.267
+   }
+  ]
+ },
+ {
+  "slide": 14,
+  "start": 283.367,
+  "steps": [
+   {
+    "word": "reveal J S",
+    "spoken": 285.667,
+    "fired": 285.567
+   },
+   {
+    "word": "vidcast skill turns",
+    "spoken": 288.307,
+    "fired": 288.2
+   },
+   {
+    "word": "Links to both",
+    "spoken": 291.647,
+    "fired": 291.533
+   }
+  ]
+ }
+]

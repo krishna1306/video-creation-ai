@@ -1,0 +1,59 @@
+{
+  "skill_name": "revealjs",
+  "evals": [
+    {
+      "id": 1,
+      "name": "distinctive-public-program-deck",
+      "prompt": "Create a six-slide reveal.js presentation for a public library's digital literacy program. The audience is older adults and the room is bright. Use a calm, approachable visual direction, speaker notes, and meaningful visual evidence. Deliver HTML and CSS files.",
+      "expected_output": "A distinctive light presentation whose narrative, imagery, typography, and varied compositions suit older adults and a bright room without borrowing Cisco styling.",
+      "assertions": [
+        "The slide sequence has a clear audience promise, supporting evidence, and concrete final action",
+        "At least three content-specific compositions are used rather than repeating one card grid",
+        "Visual evidence is prominent and any missing asset is represented by an honest, clearly labeled placeholder",
+        "Typography, contrast, density, and notes are appropriate for older adults in a bright room",
+        "The deck uses valid Reveal markup and pinned dependencies without loading unrelated libraries",
+        "Rendered desktop and mobile screenshots show no overflow, overlap, or unreadably small text"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "product-evidence-walkthrough",
+      "prompt": "Build a seven-slide reveal.js walkthrough for a passwordless sign-in product. Show the current pain, the sign-in flow, real product screens, a before-and-after comparison, and a three-step adoption path. Use modern icons and restrained animation.",
+      "expected_output": "A product-led deck with screenshots as evidence, a readable system flow, parallel before-and-after states, and a concrete action path rather than a generic feature-card presentation.",
+      "assertions": [
+        "The product and literal audience benefit appear in the first viewport",
+        "Screenshots or clearly labeled screenshot placeholders receive more visual weight than explanatory copy",
+        "The sign-in flow communicates causal order with stable nodes and subordinate connectors",
+        "Before and after states are structurally parallel and do not rely on color alone",
+        "Fragments follow the spoken sequence and reduced-motion behavior preserves all meaning",
+        "Lucide icons support visible labels and do not replace substantive visual evidence"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "preserve-existing-design-language",
+      "prompt": "Add two slides to an existing branded reveal.js presentation: one system diagram and one final call to action. Match the existing presentation closely, improve any obvious accessibility problems you touch, and do not redesign the rest of the deck.",
+      "expected_output": "Two new slides that look native to the supplied deck, reuse its tokens and motifs, introduce only necessary styles, and leave unrelated markup unchanged.",
+      "assertions": [
+        "The new slides reuse the existing palette, typography, frame, spacing, and recurring motifs",
+        "The system diagram and call to action use different compositions suited to their content",
+        "No generic starter theme or unrelated visual language is imposed",
+        "Changes remain scoped to the requested slides and shared styles they require",
+        "Touched icons, focus states, contrast, and meaningful imagery remain accessible",
+        "Browser validation confirms the additions do not overflow or break existing navigation"
+      ]
+    },
+    {
+      "id": 4,
+      "name": "underspecified-animation-request",
+      "prompt": "Add animations to my reveal.js presentation so it feels more polished.",
+      "expected_output": "One concise clarification question that recommends a likely motion approach based on narrative purpose without editing files prematurely.",
+      "assertions": [
+        "The response asks one concise question about what the motion should communicate",
+        "It recommends a likely Reveal mechanism instead of dumping an exhaustive feature list",
+        "It distinguishes sequence, pacing, continuity, code focus, and custom motion only as needed",
+        "It does not animate every element or add a community plugin by default"
+      ]
+    }
+  ]
+}

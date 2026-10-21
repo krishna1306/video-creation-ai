@@ -1,0 +1,170 @@
+/* Adaptive reveal.js starting system. Change semantic tokens to suit the deck. */
+:root {
+  --r-background-color: #f5f7f8;
+  --r-main-color: #1b2730;
+  --r-heading-color: #101820;
+  --r-link-color: #006f7d;
+  --r-selection-background-color: #bfe8ec;
+  --background: #f5f7f8;
+  --text: #1b2730;
+  --heading: #101820;
+  --muted: #4f626f;
+  --accent: #006f7d;
+  --line: rgba(27, 39, 48, 0.22);
+  --surface: rgba(255, 255, 255, 0.8);
+  --surface-strong: #ffffff;
+  --slide-gutter: 1.65em;
+  --content-gap: 0.8em;
+}
+
+.reveal {
+  font-family: "Avenir Next", "Helvetica Neue", sans-serif;
+  font-size: 32px;
+  color: var(--text);
+}
+
+.reveal-viewport { background: var(--background); }
+.reveal .slides { text-align: left; }
+.reveal .slides section { box-sizing: border-box; }
+
+.frame {
+  box-sizing: border-box;
+  width: min(100%, 36.875em);
+  margin-inline: auto;
+  padding-inline: var(--slide-gutter);
+  text-align: left;
+}
+
+.frame--center {
+  display: flex;
+  min-height: 18em;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+}
+
+.reveal h1,
+.reveal h2,
+.reveal h3,
+.reveal p { margin-top: 0; }
+
+.reveal h1,
+.reveal h2,
+.reveal h3 {
+  color: var(--heading);
+  font-family: inherit;
+  font-weight: 700;
+  letter-spacing: 0;
+  line-height: 1.08;
+  text-transform: none;
+}
+
+.title { max-width: 12em; margin-bottom: 0; font-size: 2.15em; }
+.slide-title { max-width: 19em; margin-bottom: 0; font-size: 1.45em; }
+.label,
+.eyebrow {
+  margin: 0 0 0.45em;
+  color: var(--accent);
+  font-size: 0.52em;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.dek,
+.footnote {
+  max-width: 29em;
+  margin: 1em 0 0;
+  color: var(--muted);
+  font-size: 0.76em;
+  line-height: 1.4;
+}
+
+.accent { color: var(--accent); }
+.muted { color: var(--muted); }
+
+.split {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+  gap: 1.2em;
+  align-items: center;
+  margin-top: var(--content-gap);
+}
+
+.comparison,
+.three-up,
+.four-up {
+  display: grid;
+  gap: 0.75em;
+  margin-top: var(--content-gap);
+}
+
+.comparison { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.three-up { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.four-up { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+
+.item {
+  min-width: 0;
+  padding: 0.7em 0;
+  border-top: 2px solid var(--line);
+}
+
+.item--emphasis {
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 8%, transparent);
+  padding-inline: 0.7em;
+}
+
+.item h3 { margin: 0.45em 0 0.25em; font-size: 0.78em; }
+.item p { margin: 0; color: var(--muted); font-size: 0.62em; line-height: 1.38; }
+
+.signal {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.55em;
+  margin: 0.55em 0;
+  font-size: 0.62em;
+}
+
+.signal > svg,
+.icon { flex: 0 0 auto; color: var(--accent); }
+
+.media-frame {
+  display: flex;
+  min-height: 8em;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  background: var(--surface);
+}
+
+.media-frame img,
+.media-frame video { display: block; max-width: 100%; max-height: 100%; object-fit: contain; }
+
+.reveal .controls,
+.reveal .progress { color: var(--accent); }
+
+.reveal :focus-visible { outline: 3px solid var(--accent); outline-offset: 4px; }
+
+@media (max-width: 700px) {
+  .split,
+  .comparison { grid-template-columns: 1fr; }
+  .three-up,
+  .four-up { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 460px) {
+  .three-up,
+  .four-up { grid-template-columns: 1fr; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal .slides section,
+  .reveal .fragment,
+  .reveal [data-auto-animate-target] {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}

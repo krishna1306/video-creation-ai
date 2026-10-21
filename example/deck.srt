@@ -1,0 +1,260 @@
+1
+00:00:00,600 --> 00:00:08,765
+Everything you are watching right now, the slides, the animations, the voice, and the captions, was made by two agent skills.
+
+2
+00:00:08,765 --> 00:00:11,875
+No video editor, no microphone, and no retakes.
+
+3
+00:00:13,967 --> 00:00:15,327
+It takes two skills.
+
+4
+00:00:15,327 --> 00:00:19,407
+First, the reveal J S skill builds a presentation you can present.
+
+5
+00:00:19,407 --> 00:00:23,147
+Then the vidcast skill turns that deck into a narrated video.
+
+6
+00:00:23,147 --> 00:00:28,587
+You don't need to know how reveal J S, text to speech, or the syncing works.
+
+7
+00:00:28,587 --> 00:00:30,627
+Your agent handles all of it.
+
+8
+00:00:30,627 --> 00:00:34,367
+If you are curious what happens inside the skills, keep watching.
+
+9
+00:00:36,467 --> 00:00:38,054
+So, what happens inside?
+
+10
+00:00:38,054 --> 00:00:43,612
+Turning slides into a video usually means recording yourself, and that brings three problems.
+
+11
+00:00:43,612 --> 00:00:46,390
+Retakes: one stumble, and you start again.
+
+12
+00:00:46,390 --> 00:00:51,550
+Drift: the screen recorder lags, so animations land a beat after the words.
+
+13
+00:00:51,550 --> 00:00:55,917
+Edits: change one slide, and you record the whole thing again.
+
+14
+00:00:58,000 --> 00:00:59,855
+The pipeline has five stages.
+
+15
+00:00:59,855 --> 00:01:02,080
+First, build a deck with animations.
+
+16
+00:01:02,080 --> 00:01:04,676
+Next, write a script with cue markers.
+
+17
+00:01:04,676 --> 00:01:06,902
+Then synthesise a voice with Kokoro.
+
+18
+00:01:06,902 --> 00:01:09,127
+Turn the spoken words into timing.
+
+19
+00:01:09,127 --> 00:01:12,095
+And finally, render the video, frame by frame.
+
+20
+00:01:12,095 --> 00:01:18,400
+Two skills split the work: one builds the deck, and the other turns it into the video.
+
+21
+00:01:20,500 --> 00:01:25,024
+Stage one is the deck, built with the reveal J S skill.
+
+22
+00:01:25,024 --> 00:01:28,794
+It starts from the story, giving every slide one job.
+
+23
+00:01:28,794 --> 00:01:32,564
+Then it chooses a composition, preferring real evidence over decoration.
+
+24
+00:01:32,564 --> 00:01:39,350
+Animations are fragments: each one is a step the narrator will reach, in the order it is spoken.
+
+25
+00:01:41,467 --> 00:01:43,272
+Stage two is the script.
+
+26
+00:01:43,272 --> 00:01:50,496
+The narration lives in each slide's speaker notes, with a cue marker right before the word that reveals each step.
+
+27
+00:01:50,496 --> 00:01:56,997
+The rule is simple: one marker per step, placed before the noun, not the start of the sentence.
+
+28
+00:01:56,997 --> 00:02:01,692
+Before rendering, an inspect script compares steps to markers, and flags any mismatch.
+
+29
+00:02:03,800 --> 00:02:05,651
+Stage three is the voice.
+
+30
+00:02:05,651 --> 00:02:11,574
+Kokoro is an open-weight text to speech model on Hugging Face, with just eighty-two million parameters.
+
+31
+00:02:11,574 --> 00:02:17,867
+It runs locally on a Mac, so there is no API key, and nothing leaves the machine.
+
+32
+00:02:17,867 --> 00:02:23,050
+And it returns word timestamps: a first estimate of when each word is spoken.
+
+33
+00:02:25,133 --> 00:02:26,531
+Stage four is timing.
+
+34
+00:02:26,531 --> 00:02:31,774
+Kokoro's estimate can be half a second off, especially at the start of a sentence.
+
+35
+00:02:31,774 --> 00:02:37,366
+So Whisper transcribes each clip, and the cue becomes the moment the word is actually heard.
+
+36
+00:02:37,366 --> 00:02:42,958
+The step then fires a tenth of a second early, which reads as perfectly in sync.
+
+37
+00:02:45,067 --> 00:02:46,906
+Stage five renders the video.
+
+38
+00:02:46,906 --> 00:02:52,424
+A screen recorder runs in real time, and under load it can fall seconds behind.
+
+39
+00:02:52,424 --> 00:03:00,517
+Instead, the renderer uses a virtual clock: timers and CSS animations are paused, then seeked to the exact time of every frame.
+
+40
+00:03:00,517 --> 00:03:08,242
+So a step fired at frame N is on screen at frame N, no matter how slowly the frames are captured.
+
+41
+00:03:10,333 --> 00:03:12,691
+Each render produces more than a video.
+
+42
+00:03:12,691 --> 00:03:15,722
+The M P 4, with the narration muxed in.
+
+43
+00:03:15,722 --> 00:03:19,763
+An S R T caption track, timed from the same narration clips.
+
+44
+00:03:19,763 --> 00:03:24,814
+A timeline file, recording when each cue word is spoken and when its step fires.
+
+45
+00:03:24,814 --> 00:03:33,233
+And a sync check, which listens to the finished video, watches the screen, and fails any step that lags by more than half a second.
+
+46
+00:03:35,333 --> 00:03:38,886
+And you never have to run any of this by hand.
+
+47
+00:03:38,886 --> 00:03:40,823
+Every script ships inside the skill.
+
+48
+00:03:40,823 --> 00:03:45,668
+The skill file tells your agent how to run them, and how to fix them.
+
+49
+00:03:45,668 --> 00:03:48,897
+The scripts handle setup, inspection, rendering, and the sync check.
+
+50
+00:03:48,897 --> 00:03:55,033
+And if your Python environment is different, your agent is smart enough to adapt the setup to match it.
+
+51
+00:03:57,133 --> 00:03:59,513
+One thing does depend on your model.
+
+52
+00:03:59,513 --> 00:04:04,952
+The design and story are written by the model: the layout, the animations, and the script.
+
+53
+00:04:04,952 --> 00:04:06,651
+Stronger models make better decks.
+
+54
+00:04:06,651 --> 00:04:13,790
+The voice, timing, and render are done by scripts, so whichever model you use, you still get a working, synced video.
+
+55
+00:04:13,790 --> 00:04:16,509
+For the best design, use a strong model.
+
+56
+00:04:16,509 --> 00:04:19,908
+This deck was designed by Claude Opus five point five.
+
+57
+00:04:22,000 --> 00:04:24,208
+It is also cheap to run.
+
+58
+00:04:24,208 --> 00:04:30,833
+The model writes one HTML file, and everything after that is code, so very few tokens are spent.
+
+59
+00:04:30,833 --> 00:04:34,882
+You need no image or video model, only a text model.
+
+60
+00:04:34,882 --> 00:04:41,875
+A multimodal model does help: the agent takes Playwright screenshots of each slide, and checks that everything renders correctly.
+
+61
+00:04:43,967 --> 00:04:44,973
+So, two skills.
+
+62
+00:04:44,973 --> 00:04:47,656
+The reveal J S skill builds the deck.
+
+63
+00:04:47,656 --> 00:04:50,675
+The vidcast skill turns it into a narrated video.
+
+64
+00:04:50,675 --> 00:04:53,023
+Links to both are in the post.
+
+65
+00:04:53,023 --> 00:04:56,042
+Make a deck, and let it speak for itself.
+

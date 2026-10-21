@@ -1,0 +1,14 @@
+{
+  "name": "revealjs-skill-tools",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Local validation tools for the Reveal.js presentation skill",
+  "scripts": {
+    "check:overflow": "node scripts/check-overflow.js",
+    "check:charts": "node scripts/check-charts.js"
+  },
+  "dependencies": {
+    "cheerio": "1.2.0",
+    "puppeteer": "25.13.0"
+  }
+}

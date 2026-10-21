@@ -1,0 +1,18 @@
+@import url("./styles.css");
+
+/* Light token overlay for a generated deck. */
+:root {
+  --r-background-color: #f5f7f8;
+  --r-main-color: #1b2730;
+  --r-heading-color: #101820;
+  --r-link-color: #006f7d;
+  --r-selection-background-color: #bfe8ec;
+  --background: #f5f7f8;
+  --text: #1b2730;
+  --heading: #101820;
+  --muted: #4f626f;
+  --accent: #006f7d;
+  --line: rgba(27, 39, 48, 0.22);
+  --surface: rgba(255, 255, 255, 0.8);
+  --surface-strong: #ffffff;
+}
