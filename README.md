@@ -2,7 +2,7 @@
 
 **Two agent skills. One idea-to-video workflow.**
 
-[Watch the example](example/deck.mp4) | [Open the slides](example/deck.html)
+[Watch the example](https://youtu.be/NSbSgm9Kfvc) | [Open the slides](example/deck.html)
 
 ## What This Is
 
@@ -21,7 +21,7 @@ Both bundles include their supporting scripts and references. The finished demo 
 
 Your agent creates the deck and writes narration in speaker notes. `[>]` markers connect spoken words to animation steps. Kokoro generates the voice, Whisper refines cue timing, and a virtual clock renders frames deterministically. A separate sync check verifies the result.
 
-The example includes the [HTML deck](example/deck.html), [video](example/deck.mp4), [captions](example/deck.srt), and [timing data](example/deck.timeline.json).
+The example includes the [HTML deck](example/deck.html), [video](https://youtu.be/NSbSgm9Kfvc), [captions](example/deck.srt), and [timing data](example/deck.timeline.json).
 
 ## Run It
 
